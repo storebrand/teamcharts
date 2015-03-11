@@ -21,6 +21,7 @@
     <body>
 		<!-- containers -->
 		<div id="example"></div>
+
         <div class="wrapper">
             <div class="flex-parent flex-column">
                 <div class="flex-item" id="linechart">
@@ -62,7 +63,9 @@
                         success: function(data) {
                             var blah = _.clone(lineChartData);
                             blah[0].values[0].y = ++counter;
-                            this.setState({lineChartData: blah});
+                            if (this.isMounted()) {
+                                this.setState({lineChartData: blah});
+                            }
                         }.bind(this),
                         error: function(xhr, status, err) {
                             console.error(this.props.url, status, err.toString());
@@ -101,6 +104,20 @@
             </script>
 
         <script type="text/jsx">
+
+            var SetIntervalMixin = {
+                componentWillMount: function() {
+                    this.intervals = [];
+                },
+                setInterval: function() {
+                    this.intervals.push(setInterval.apply(null, arguments));
+                },
+                componentWillUnmount: function() {
+                    this.intervals.map(clearInterval);
+                }
+            };
+
+
             var BarChart = ReactD3.BarChart;
 
             var barChartData = [{
@@ -109,6 +126,29 @@
             }];
 
             var BarChartComponent = React.createClass({
+                mixins: [SetIntervalMixin],
+
+                loadChartDataFromServer: function() {
+                    $.ajax({
+                        url: this.props.url,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (this.isMounted()) {
+                                var blah = _.clone(barChartData);
+                                blah[0].values[0].y = ++counter;
+                                this.setState({barChartData: blah});
+                            }
+                        }.bind(this),
+                        error: function(xhr, status, err) {
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });
+                },
+
+                componentDidMount: function(){
+                    this.setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+                },
+
                 getInitialState:function(){
                     return {
                         barChartData: barChartData,
@@ -116,9 +156,6 @@
                         height: 300
                     }
                 },
-                componentDidMount: function(){
-                },
-
                 render: function() {
                     return (
                             <BarChart   data={this.state.barChartData}
@@ -129,7 +166,7 @@
                     );
                 }
             });
-            React.render(<BarChartComponent />,document.getElementById('barchart'));
+            React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />,document.getElementById('barchart'));
         </script>
 
         <script type="text/jsx">
