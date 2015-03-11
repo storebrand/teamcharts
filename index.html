@@ -2,17 +2,96 @@
 <html lang="en">
 	<head>
 	  <meta charset="UTF-8">
-	  <title>Hello World</title>
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.0-rc2/react-with-addons.js"></script>
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.0-rc2/JSXTransformer.js"></script>
+	  <title>Team Charts</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react-with-addons.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+	  <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+	  <script src="https://cdn.rawgit.com/esbullington/react-d3/fff663d549c9492ecf7da3a4108718b04630432a/dist/public/js/react-d3.min.js"></script>
 	</head>
 	<body>
+		<!-- containers -->
 		<div id="example"></div>
+		<div id="container"></div>
+		<script type="text/jsx">
+			var BarChart = rd3.BarChart;
+
+			var barData = [
+			  {label: 'A', value: 5},
+			  {label: 'B', value: 6},
+			  {label: 'F', value: 7}
+			];
+
+			var Hello = React.createClass({
+			    render: function() {
+			        return (
+			        	<BarChart data={barData} width={500} height={200} fill={'#3182bd'} title='Bar Chart'/>
+			            );
+			    }
+			});
+			 
+			React.render(<Hello name="World" />, document.getElementById('container'));
+
+		</script>
     	<script type="text/jsx">
-      		React.render(
-        		<h1>Hello, world!</h1>,
-       			document.getElementById('example')
-      		);
+      		var App = React.createClass({
+
+      			loadChartDataFromServer: function() {
+				    $.ajax({
+				      url: this.props.url,
+				      dataType: 'json',
+				      success: function(data) {
+				        this.setState({data: data});
+				      }.bind(this),
+				      error: function(xhr, status, err) {
+				        console.error(this.props.url, status, err.toString());
+				      }.bind(this)
+				    });
+				},
+
+      			componentDidMount: function(){
+      				this.loadChartDataFromServer();
+      				setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+   				},	
+
+      			getInitialState:function(){
+				    return {
+				      query: '',
+				      data: {},
+				      id: 0
+				    }
+				},
+
+				getDefaultProps:function(){
+			    	return {
+			      		txt: 'this is a default prop',
+			      		cat: 0
+			    	}
+			  	},
+
+			  	update: function(e){
+					this.setState({query: e.target.value});
+				},
+
+      			propTypes: {
+      				txt: React.PropTypes.string,
+      				cat: React.PropTypes.number.isRequired
+      			},
+      			render: function() {
+      				return (
+      					<div>
+      						<input type="text" onChange={this.update} />
+      						<br/>
+      						<span>{this.props.txt} {this.props.cat}</span>
+        					<h1>Hello, world!</h1>
+        					<span>{this.state.data}</span>
+        				</div>
+        			)	
+      			}	
+      		});
+
+      		React.render(<App txt="this is the props" url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('example'));
     </script>
 	</body>
 </html>
