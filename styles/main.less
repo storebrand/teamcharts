@@ -1,0 +1,23 @@
+@import 'flex-mixin';
+
+.flex-parent {
+    .flex-display(flex);
+}
+
+.flex-column {
+    .flex-direction(column);
+    height: 100%;
+}
+
+.flex-row {
+    .flex-direction(row);
+}
+
+.flex-parent>.flex-item {
+   .flex(1);
+    border: solid 1px black;
+}
+
+body, html, .wrapper {
+    height:100%
+}
