@@ -23,14 +23,12 @@
 		<div id="example"></div>
         <div class="wrapper">
             <div class="flex-parent flex-column">
-                <div class="flex-item" id="chart1">
+                <div class="flex-item" id="linechart">
                 </div>
                 <div class="flex-item flex-parent">
-                    <div class="flex-item">
-                        Content here
+                    <div id="barchart" class="flex-item weight-2">
                     </div>
-                    <div id="piechart" class="flex-item weight-2">
-                        Content here
+                    <div id="piechart" class="flex-item weight-3">
                     </div>
                 </div>
             </div>
@@ -99,12 +97,43 @@
 			    }
 			});
 
-			React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('chart1'));
-		</script>
+            React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('linechart'));
+            </script>
+
+        <script type="text/jsx">
+            var BarChart = ReactD3.BarChart;
+
+            var barChartData = [{
+                label:'somethingA',
+                values: [{x:'Monday', y:10}, {x:'Tuesday', y:4}, {x:'Wednesday', y:3},{x:'Thursday', y:3},{x:'Friday', y:3},{x:'Saturday', y:3},{x:'Sunday', y:3}]
+            }];
+
+            var BarChartComponent = React.createClass({
+                getInitialState:function(){
+                    return {
+                        barChartData: barChartData,
+                        width: 650,
+                        height: 300
+                    }
+                },
+                componentDidMount: function(){
+                },
+
+                render: function() {
+                    return (
+                            <BarChart   data={this.state.barChartData}
+                                        width={this.state.width}
+                                        height={this.state.height}
+                                        yAxis={{label: "hits"}}
+                                        margin={{top:50, bottom:50, left:50, right:50}}/>
+                    );
+                }
+            });
+            React.render(<BarChartComponent />,document.getElementById('barchart'));
+        </script>
 
         <script type="text/jsx">
 
-        	
         var colorScale = d3.scale.ordinal()
 		  .domain(["SomethingA", "SomethingB", "SomethingC"])
 		  .range(["#404040", "#819f2b" , "#bb1b18"]);
