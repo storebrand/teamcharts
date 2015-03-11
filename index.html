@@ -4,12 +4,13 @@
         <meta charset="UTF-8">
 	    <title>Team Charts</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react-with-addons.js"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
-	    <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
-	    <script src="https://cdn.rawgit.com/esbullington/react-d3/fff663d549c9492ecf7da3a4108718b04630432a/dist/public/js/react-d3.min.js"></script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js" charset="UTF-8"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js" charset="UTF-8"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
+	    <script src="js/react-d3-components.js"></script>
 
         <link rel="stylesheet/less" type="text/css" href="styles/main.less">
         <link href="//elements.storebrand.no/storebrand.ny/0.50/css/stb-main.css" type="text/css" rel="stylesheet"/>
@@ -33,65 +34,22 @@
         </div>
 
         <script type="text/jsx">
-            var LineChart = rd3.LineChart;
+            var BarChart = ReactD3.BarChart;
 
-			var LineChartComponent = React.createClass({
+            var data = [{
+                label: 'somethingA',
+                values: [{x: 'SomethingA', y: 10}, {x: 'SomethingB', y: 4}, {x: 'SomethingC', y: 3}]
+            }];
 
-                loadChartDataFromServer: function() {
-                    $.ajax({
-                        url: this.props.url,
-                        dataType: 'json',
-                        success: function(data) {
-                            //this.setState({lineChartData: data});
-                            console.log(data);
-                        }.bind(this),
-                        error: function(xhr, status, err) {
-                            console.error(this.props.url, status, err.toString());
-                        }.bind(this)
-                    });
-                },
-
-                componentDidMount: function(){
-                    this.loadChartDataFromServer();
-                    setInterval(this.loadChartDataFromServer, this.props.pollInterval);
-                },
-
-                getInitialState:function(){
-                    return {
-                        lineChartData: [
-                            {
-                                name: 'series1',
-                                values: [ { x: 0, y: 20 }, { x: 1, y: 30 }, { x: 2, y: 10 }, { x: 3, y: 5 }, { x: 4, y: 8 }, { x: 5, y: 15 }, { x: 6, y: 10 } ]
-                            },
-                            {
-                                name: 'series2',
-                                values : [ { x: 0, y: 8 }, { x: 1, y: 5 }, { x: 2, y: 20 }, { x: 3, y: 12 }, { x: 4, y: 4 }, { x: 5, y: 6 }, { x: 6, y: 2 } ]
-                            },
-                            {
-                                name: 'series3',
-                                values: [ { x: 0, y: 0 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 2 }, { x: 4, y: 6 }, { x: 5, y: 4 }, { x: 6, y: 2 } ]
-                            }
-                        ],
-                        width: 500,
-                        height: 300
-                    }
-                },
-
-			    render: function() {
-			        return (
-                            <LineChart
-                                    legend={true}
-                                    data={this.state.lineChartData}
-                                    width={this.state.width}
-                                    height={this.state.height}
-                                    title="Hits Per Day"
-                            />
-			            );
-			    }
-			});
-			 
-			React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('chart1'));
-		</script>
+            React.render(
+                    <BarChart
+                            data={data}
+                            width={400}
+                            height={400}
+                            margin={{top: 10, bottom: 50, left: 50, right: 10}}/>,
+                    document.getElementById('chart1')
+            );
+        </script>
 
         <script type="text/jsx">
       		var App = React.createClass({
