@@ -9,6 +9,7 @@
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
 	  <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
 	  <script src="https://cdn.rawgit.com/esbullington/react-d3/fff663d549c9492ecf7da3a4108718b04630432a/dist/public/js/react-d3.min.js"></script>
+      <link rel="stylesheet/less" type="text/css" href="styles/main.less">
 	</head>
 	<body>
 		<!-- containers -->
@@ -93,5 +94,21 @@
 
       		React.render(<App txt="this is the props" url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('example'));
     </script>
-	</body>
+        <div class="wrapper">
+          <div class="flex-parent flex-column">
+            <div class="flex-item">
+              Content here
+            </div>
+            <div class="flex-item flex-parent">
+              <div class="flex-item">
+                Content here
+              </div>
+              <div class="flex-item weight-2">
+                Content here
+              </div>
+            </div>
+          </div>
+        </div>
+    <script src="js/less.min.js" type="text/javascript"></script>
+  </body>
 </html>

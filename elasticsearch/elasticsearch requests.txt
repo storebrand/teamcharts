@@ -1,0 +1,107 @@
+# Queries can be tested here: http://es-t.stb.intra/_plugin/marvel/sense/
+
+# Get saveAcceptOnInsuranceOffer from inputlog
+
+GET _search
+{
+    "query": {
+        "filtered": {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "text_phrase": {
+                                "data": "saveAcceptOnInsuranceOffer>"
+                            }
+                        },
+                        {
+                            "match": {
+                                "application_id": "skade"
+                            }
+                        },
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte": 1425164400000,
+                                    "lte": 1448924400000
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "size": 1000,
+    "sort": { "timestamp": { "order": "desc" }}
+}
+
+
+# Get saveAcceptOnInsuranceOffer from accesslog
+
+GET _search
+{
+    "query": {
+        "filtered": {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "match": {
+                                "logtype": "access>"
+                            }
+                        },
+                        {
+                            "match": {
+                                "application_id": "skade"
+                            }
+                        },
+                        {
+                            "match": {
+                                "transaction_id1": "skadeinsurance"
+                            }
+                        },
+                        {
+                            "match": {
+                                "transaction_id2": "saveacceptoninsuranceoffer"
+                            }
+                        },
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte": 1425164400000,
+                                    "lte": 1448924400000
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "size": 1000,
+    "sort": { "timestamp": { "order": "desc" }}
+}
+
+
+POST /infoscreenproxy/strapp/_search
+
+
+RESPONSE:
+
+{
+    "01032015": {
+        "01": 10,
+        "02": 12,
+        "03": 44,
+        .
+        .
+    },
+    "01032015": {
+        "01": 10,
+        "02": 12,
+        "03": 44,
+        .
+        .
+    }    
+}
