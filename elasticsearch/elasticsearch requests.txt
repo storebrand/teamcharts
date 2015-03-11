@@ -48,7 +48,7 @@ GET _search
                     "must": [
                         {
                             "match": {
-                                "logtype": "access>"
+                                "logtype": "access"
                             }
                         },
                         {
@@ -68,7 +68,7 @@ GET _search
                         },
                         {
                             "range": {
-                                "timestamp": {
+                                "@timestamp": {
                                     "gte": 1425164400000,
                                     "lte": 1448924400000
                                 }
@@ -80,7 +80,7 @@ GET _search
         }
     },
     "size": 1000,
-    "sort": { "timestamp": { "order": "desc" }}
+    "sort": { "@timestamp": { "order": "desc" }}
 }
 
 
