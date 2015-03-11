@@ -83,3 +83,25 @@ GET _search
     "sort": { "timestamp": { "order": "desc" }}
 }
 
+
+POST /infoscreenproxy/strapp/_search
+
+
+RESPONSE:
+
+{
+    "01032015": {
+        "01": 10,
+        "02": 12,
+        "03": 44,
+        .
+        .
+    },
+    "01032015": {
+        "01": 10,
+        "02": 12,
+        "03": 44,
+        .
+        .
+    }    
+}
