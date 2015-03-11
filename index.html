@@ -14,6 +14,9 @@
 
         <link rel="stylesheet/less" type="text/css" href="styles/main.less">
         <link href="//elements.storebrand.no/storebrand.ny/0.50/css/stb-main.css" type="text/css" rel="stylesheet"/>
+        <style>
+
+        </style>
     </head>
     <body>
 		<!-- containers -->
@@ -48,7 +51,12 @@
             ];
             var counter = 2;
 
-			var LineChartComponent = React.createClass({
+            var colorScale = d3.scale.ordinal()
+                    .domain(["somethingA", "somethingB"])
+                    .range(["#404040", "#819f2b"]);
+
+            var LineChartComponent = React.createClass({
+
                 loadChartDataFromServer: function() {
                     $.ajax({
                         url: this.props.url,
@@ -57,8 +65,6 @@
                             var blah = _.clone(lineChartData);
                             blah[0].values[0].y = ++counter;
                             this.setState({lineChartData: blah});
-
-                            console.log(data);
                         }.bind(this),
                         error: function(xhr, status, err) {
                             console.error(this.props.url, status, err.toString());
@@ -82,15 +88,18 @@
 			    render: function() {
 			        return (
                             <LineChart
+                                    colorScale={colorScale}
                                     data={this.state.lineChartData}
-                                    width={400}
-                                    height={400}
+                                    width={this.state.width}
+                                    height={this.state.height}
+                                    xAxis={{innerTickSize: 6, label: "day"}}
+                                    yAxis={{label: "hits"}}
                                     margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
 			            );
 			    }
 			});
 
-			React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={1000} />, document.getElementById('chart1'));
+			React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('chart1'));
 		</script>
 
         <script type="text/jsx">
