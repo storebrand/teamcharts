@@ -3,14 +3,10 @@
 (function() {
   var LineChart = ReactD3.LineChart;
 
-  lineChartData = [
+  var lineChartData = [
     {
-      label: 'somethingA',
+      label: 'Salg',
       values: [{x: 0, y: 2}, {x: 1.3, y: 5}, {x: 3, y: 6}]
-    },
-    {
-      label: 'somethingB',
-      values: [{x: 0, y: 3}, {x: 1.3, y: 4}, {x: 3, y: 7}]
     }
   ];
   var counter = 2;
@@ -27,11 +23,18 @@
         url: this.props.url,
         dataType: 'json',
         success: function (data) {
-          var blah = _.clone(lineChartData);
-          blah[0].values[0].y = ++counter;
           if (this.isMounted()) {
-            this.setState({lineChartData: blah});
-          }
+             var mapped = [];
+              mappedValues = [];
+              _.each(_.last(data.dailyHitsList).hourlyHitsList, function(item){
+                 mappedValues.push({x: item.hour,y:item.count});
+              })
+             var lineChartData = [{
+                label: 'somethingA',
+                values: mappedValues
+              }];
+             this.setState({lineChartData: lineChartData});
+           }
         }.bind(this),
         error: function (xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -79,6 +82,6 @@
     }
   });
 
-  React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, lineChartMountPoint);
+  React.render(<LineChartComponent url="/api/open/elasticsearch/search?application_id=skade&transaction_id1=skadeinsurance&transaction_id2=saveacceptoninsuranceoffer&lastDays=7" pollInterval={5000} />, lineChartMountPoint);
 
 }());

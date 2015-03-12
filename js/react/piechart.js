@@ -9,7 +9,7 @@
 
   pieChartData = {
     label: 'somethingA',
-    values: [{x: 'SomethingA', y: 10}, {x: 'SomethingB', y: 4}, {x: 'SomethingC', y: 3}]
+    values: [{x: 'Bil', y: 10}, {x: 'Innbo', y: 4}, {x: 'Hus', y: 3}]
   };
   var pieChartMountPoint = document.getElementById('piechart');
 
