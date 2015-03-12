@@ -3,7 +3,7 @@
 
   var BarChart = ReactD3.BarChart;
 
-    //TODO: Fungerer ikke
+    //TODO: Farge fungerer ikke
   var colorScale = d3.scale.ordinal()
     .domain(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
     .range(["#404040", "#819f2b", "#bb1b18", "#404040", "#819f2b", "#bb1b18", "#404040"]);
@@ -33,8 +33,18 @@
         dataType: 'json',
         success: function (data) {
           if (this.isMounted()) {
-            var blah = _.clone(barChartData);
-            this.setState({barChartData: blah});
+          console.log(data);
+            var mapped = [];
+             mappedValues = [];
+
+             _.each(data.dailyHitsList, function(item){
+                mappedValues.push({x: item.dayName,y:item.count});
+             })
+            var barChartData = [{
+               label: 'somethingA',
+               values: mappedValues
+             }];
+            this.setState({barChartData: barChartData});
           }
         }.bind(this),
         error: function (xhr, status, err) {
@@ -73,6 +83,6 @@
     }
   });
 
-  React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />, barChartMountPoint);
+  React.render(<BarChartComponent url="/api/open/elasticsearch/search?application_id=skade&transaction_id1=skadeinsurance&transaction_id2=saveacceptoninsuranceoffer&lastDays=7" pollInterval={2000} />, barChartMountPoint);
 }());
 
