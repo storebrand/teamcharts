@@ -10,6 +10,8 @@ var gulp = require('gulp'),
  */
  var filesToMove = [
          './*',
+         './*/*',
+         './*/*/*',
          '.*'
      ];
 
