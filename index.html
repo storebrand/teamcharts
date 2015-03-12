@@ -169,32 +169,7 @@
             React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />,document.getElementById('barchart'));
         </script>
 
-        <script type="text/jsx">
 
-        var colorScale = d3.scale.ordinal()
-		  .domain(["SomethingA", "SomethingB", "SomethingC"])
-		  .range(["#404040", "#819f2b" , "#bb1b18"]);
-
-          var width= 300;
-			    var height= 300;
-
-           var PieChart = ReactD3.PieChart;
-
-			data = {
-			    label: 'somethingA',
-			    values: [{x: 'SomethingA', y: 10}, {x: 'SomethingB', y: 4}, {x: 'SomethingC', y: 3}]
-
-			};
-
-			React.render(<PieChart
-				colorScale={colorScale}
-			                data={data}
-			                width={width}
-			                height={height}
-			                margin={{top: 10, bottom: 10, left: 100, right: 100}}/>,
-			            document.getElementById('piechart')
-			);
-        </script>
 
         <script type="text/jsx">
       		var App = React.createClass({
@@ -256,5 +231,6 @@
       		React.render(<App txt="this is the props" url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('example'));
     </script>
     <script src="js/less.min.js" type="text/javascript"></script>
-  </body>
+    <script type="text/jsx"  src="js/react/piechart.js"></script>
+    </body>
 </html>
