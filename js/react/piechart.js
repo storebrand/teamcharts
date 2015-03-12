@@ -13,20 +13,8 @@
   };
   var pieChartMountPoint = document.getElementById('piechart');
 
-  var SetIntervalMixin = {
-    componentWillMount: function () {
-      this.intervals = [];
-    },
-    setInterval: function () {
-      this.intervals.push(setInterval.apply(null, arguments));
-    },
-    componentWillUnmount: function () {
-      this.intervals.map(clearInterval);
-    }
-  };
-
   var PieChartComponent = React.createClass({
-    mixins: [SetIntervalMixin],
+    mixins: [window.teamcharts.mixins.SetIntervalMixin],
 
     getInitialState: function () {
       return {

@@ -1,17 +1,5 @@
 /** @jsx React.DOM */
 (function() {
-  var SetIntervalMixin = {
-    componentWillMount: function () {
-      this.intervals = [];
-    },
-    setInterval: function () {
-      this.intervals.push(setInterval.apply(null, arguments));
-    },
-    componentWillUnmount: function () {
-      this.intervals.map(clearInterval);
-    }
-  };
-
 
   var BarChart = ReactD3.BarChart;
 
@@ -23,15 +11,15 @@
     }, {x: 'Saturday', y: 3}, {x: 'Sunday', y: 3}]
   }];
 
-  var mountPoint = document.getElementById('barchart');
+  var barChartMountPoint = document.getElementById('barchart');
 
   var BarChartComponent = React.createClass({
-    mixins: [SetIntervalMixin],
+    mixins: [window.teamcharts.mixins.SetIntervalMixin],
 
-    handleResize: function (e) {
+    handleResize: function () {
       this.setState({
-        width: mountPoint.offsetWidth,
-        height: mountPoint.offsetHeight
+        width: barChartMountPoint.offsetWidth,
+        height: barChartMountPoint.offsetHeight
       });
     },
 
@@ -52,13 +40,11 @@
     },
 
     componentDidMount: function () {
-      this.setState({
-        width: mountPoint.offsetWidth,
-        height: mountPoint.offsetHeight
-      });
+      this.setState({width: barChartMountPoint.offsetWidth, height: barChartMountPoint.offsetHeight});
       this.setInterval(this.loadChartDataFromServer, this.props.pollInterval);
       window.addEventListener('resize', this.handleResize);
     },
+
     componentWillUnmount: function () {
       window.removeEventListener('resize', this.handleResize);
     },
@@ -72,7 +58,8 @@
     },
     render: function () {
       return (
-        <BarChart   data={this.state.barChartData}
+        <BarChart
+          data={this.state.barChartData}
           width={this.state.width}
           height={this.state.height}
           yAxis={{label: "hits"}}
@@ -81,6 +68,6 @@
     }
   });
 
-  React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />, mountPoint);
+  React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />, barChartMountPoint);
 }());
 

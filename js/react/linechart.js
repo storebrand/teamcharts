@@ -22,6 +22,8 @@
 
   var LineChartComponent = React.createClass({
 
+    mixins: [window.teamcharts.mixins.SetIntervalMixin],
+
     loadChartDataFromServer: function () {
       $.ajax({
         url: this.props.url,
@@ -49,11 +51,8 @@
     componentDidMount: function () {
       window.addEventListener('resize', this.handleResize);
       this.loadChartDataFromServer();
-      setInterval(this.loadChartDataFromServer, this.props.pollInterval);
-      this.setState({
-        width: lineChartMountPoint.offsetWidth,
-        height: lineChartMountPoint.offsetHeight
-      });
+      this.setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+      this.setState({width: lineChartMountPoint.offsetWidth, height: lineChartMountPoint.offsetHeight});
     },
 
     componentWillUnmount: function () {
