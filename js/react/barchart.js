@@ -3,12 +3,16 @@
 
   var BarChart = ReactD3.BarChart;
 
+    //TODO: Fungerer ikke
+  var colorScale = d3.scale.ordinal()
+    .domain(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+    .range(["#404040", "#819f2b", "#bb1b18", "#404040", "#819f2b", "#bb1b18", "#404040"]);
+
+
   var barChartData = [{
     label: 'somethingA',
     values: [{x: 'Monday', y: 10}, {x: 'Tuesday', y: 4}, {x: 'Wednesday', y: 3}, {x: 'Thursday', y: 3}, {
-      x: 'Friday',
-      y: 3
-    }, {x: 'Saturday', y: 3}, {x: 'Sunday', y: 3}]
+      x: 'Friday', y: 3}, {x: 'Saturday', y: 3}, {x: 'Sunday', y: 3}]
   }];
 
   var barChartMountPoint = document.getElementById('barchart');
@@ -59,6 +63,7 @@
     render: function () {
       return (
         <BarChart
+          colorScale={colorScale}
           data={this.state.barChartData}
           width={this.state.width}
           height={this.state.height}

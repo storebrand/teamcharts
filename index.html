@@ -19,14 +19,30 @@
     <body>
         <div class="wrapper">
             <div class="flex-parent flex-column">
-                <div class="flex-item" id="linechart">
+              <div class="flex-item flex-parent flex-column top-row">
+                <div class="flex-item">
+                  <h4>Daglig salg</h4>
+                  <span class="stb-sprite-medium red pretzel custom-sprite"></span>
                 </div>
-                <div class="flex-item flex-parent">
-                    <div id="barchart" class="flex-item weight-2">
+                <div class="flex-item  weight-4" id="linechart"></div>
+              </div>
+              <div class="flex-item flex-parent">
+                  <div class="flex-item weight-2 flex-parent flex-column left-row">
+                    <div class="flex-item">
+                      <h4>Ukentlig</h4>
+                      <span class="stb-sprite-medium red pretzel custom-sprite"></span>
                     </div>
-                    <div id="piechart" class="flex-item weight-3">
-                    </div>
+                    <div class="flex-item weight-4" id="barchart"></div>
+                  </div>
+
+                <div class="flex-item flex-parent flex-column right-row">
+                  <div class="flex-item">
+                    <h4 >Fordeling</h4>
+                    <span class="stb-sprite-medium red pretzel custom-sprite"></span>
+                  </div>
+                  <div class="flex-item weight-4"  id="piechart"></div>
                 </div>
+              </div>
             </div>
         </div>
 
