@@ -16,9 +16,7 @@
   var counter = 2;
   var lineChartMountPoint = document.getElementById('linechart');
 
-  var colorScale = d3.scale.ordinal()
-    .domain(["somethingA", "somethingB"])
-    .range(["#404040", "#819f2b"]);
+  var colorScale = d3.scale.ordinal().domain(["somethingA", "somethingB"]).range(["#404040", "#819f2b"]);
 
   var LineChartComponent = React.createClass({
 
