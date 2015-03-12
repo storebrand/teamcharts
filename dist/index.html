@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta charset="UTF-8">
+	    <title>Team Charts</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js"></script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js" charset="UTF-8"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js" charset="UTF-8"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
+	    <script src="js/react-d3-components.js"></script>
+
+        <link rel="stylesheet/less" type="text/css" href="styles/main.less">
+        <link href="//elements.storebrand.no/storebrand.ny/0.50/css/stb-main.css" type="text/css" rel="stylesheet"/>
+        <style>
+
+        </style>
+    </head>
+    <body>
+		<!-- containers -->
+		<div id="example"></div>
+
+        <div class="wrapper">
+            <div class="flex-parent flex-column">
+                <div class="flex-item" id="linechart">
+                </div>
+                <div class="flex-item flex-parent">
+                    <div id="barchart" class="flex-item weight-2">
+                    </div>
+                    <div id="piechart" class="flex-item weight-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/jsx">
+            var LineChart = ReactD3.LineChart;
+
+            lineChartData = [
+                {
+                    label: 'somethingA',
+                    values: [{x: 0, y: 2}, {x: 1.3, y: 5}, {x: 3, y: 6}]
+                },
+                {
+                    label: 'somethingB',
+                    values: [{x: 0, y: 3}, {x: 1.3, y: 4}, {x: 3, y: 7}]
+                }
+            ];
+            var counter = 2;
+
+            var colorScale = d3.scale.ordinal()
+                    .domain(["somethingA", "somethingB"])
+                    .range(["#404040", "#819f2b"]);
+
+            var LineChartComponent = React.createClass({
+
+                loadChartDataFromServer: function() {
+                    $.ajax({
+                        url: this.props.url,
+                        dataType: 'json',
+                        success: function(data) {
+                            var blah = _.clone(lineChartData);
+                            blah[0].values[0].y = ++counter;
+                            if (this.isMounted()) {
+                                this.setState({lineChartData: blah});
+                            }
+                        }.bind(this),
+                        error: function(xhr, status, err) {
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });
+                },
+
+                componentDidMount: function(){
+                    this.loadChartDataFromServer();
+                    setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+                },
+
+                getInitialState:function(){
+                    return {
+                        lineChartData: lineChartData,
+                        width: 500,
+                        height: 300
+                    }
+                },
+
+			    render: function() {
+			        return (
+                            <LineChart
+                                    colorScale={colorScale}
+                                    data={this.state.lineChartData}
+                                    width={this.state.width}
+                                    height={this.state.height}
+                                    xAxis={{innerTickSize: 6, label: "day"}}
+                                    yAxis={{label: "hits"}}
+                                    margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
+			            );
+			    }
+			});
+
+            React.render(<LineChartComponent url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('linechart'));
+            </script>
+
+        <script type="text/jsx">
+
+            var SetIntervalMixin = {
+                componentWillMount: function() {
+                    this.intervals = [];
+                },
+                setInterval: function() {
+                    this.intervals.push(setInterval.apply(null, arguments));
+                },
+                componentWillUnmount: function() {
+                    this.intervals.map(clearInterval);
+                }
+            };
+
+
+            var BarChart = ReactD3.BarChart;
+
+            var barChartData = [{
+                label:'somethingA',
+                values: [{x:'Monday', y:10}, {x:'Tuesday', y:4}, {x:'Wednesday', y:3},{x:'Thursday', y:3},{x:'Friday', y:3},{x:'Saturday', y:3},{x:'Sunday', y:3}]
+            }];
+
+            var BarChartComponent = React.createClass({
+                mixins: [SetIntervalMixin],
+
+                loadChartDataFromServer: function() {
+                    $.ajax({
+                        url: this.props.url,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (this.isMounted()) {
+                                var blah = _.clone(barChartData);
+                                blah[0].values[0].y = ++counter;
+                                this.setState({barChartData: blah});
+                            }
+                        }.bind(this),
+                        error: function(xhr, status, err) {
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });
+                },
+
+                componentDidMount: function(){
+                    this.setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+                },
+
+                getInitialState:function(){
+                    return {
+                        barChartData: barChartData,
+                        width: 650,
+                        height: 300
+                    }
+                },
+                render: function() {
+                    return (
+                            <BarChart   data={this.state.barChartData}
+                                        width={this.state.width}
+                                        height={this.state.height}
+                                        yAxis={{label: "hits"}}
+                                        margin={{top:50, bottom:50, left:50, right:50}}/>
+                    );
+                }
+            });
+            React.render(<BarChartComponent url="http://date.jsontest.com" pollInterval={2000} />,document.getElementById('barchart'));
+        </script>
+
+
+
+        <script type="text/jsx">
+      		var App = React.createClass({
+
+      			loadChartDataFromServer: function() {
+				    $.ajax({
+				      url: this.props.url,
+				      dataType: 'json',
+				      success: function(data) {
+				        this.setState({data: data});
+				      }.bind(this),
+				      error: function(xhr, status, err) {
+				        console.error(this.props.url, status, err.toString());
+				      }.bind(this)
+				    });
+				},
+
+      			componentDidMount: function(){
+      				this.loadChartDataFromServer();
+      				setInterval(this.loadChartDataFromServer, this.props.pollInterval);
+   				},	
+
+      			getInitialState:function(){
+				    return {
+				      query: '',
+				      data: {},
+				      id: 0
+				    }
+				},
+
+				getDefaultProps:function(){
+			    	return {
+			      		txt: 'this is a default prop',
+			      		cat: 0
+			    	}
+			  	},
+
+			  	update: function(e){
+					this.setState({query: e.target.value});
+				},
+
+      			propTypes: {
+      				txt: React.PropTypes.string,
+      				cat: React.PropTypes.number.isRequired
+      			},
+      			render: function() {
+      				return (
+      					<div>
+      						<input type="text" onChange={this.update} />
+      						<br/>
+      						<span>{this.props.txt} {this.props.cat}</span>
+        					<h1>Hello, world!</h1>
+        					<span>{this.state.query}</span>
+        				</div>
+        			)	
+      			}	
+      		});
+
+      		React.render(<App txt="this is the props" url="http://date.jsontest.com" pollInterval={5000} />, document.getElementById('example'));
+    </script>
+    <script src="js/less.min.js" type="text/javascript"></script>
+    <script type="text/jsx"  src="js/react/piechart.js"></script>
+    </body>
+</html>
