@@ -42,7 +42,6 @@
         success: function (data) {
           if (this.isMounted()) {
             var blah = _.clone(barChartData);
-            blah[0].values[0].y = ++counter;
             this.setState({barChartData: blah});
           }
         }.bind(this),

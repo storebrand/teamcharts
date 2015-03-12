@@ -17,13 +17,9 @@
   },
   "homepage": "https://github.com/storebrand/teamcharts",
   "devDependencies": {
-    "gulp": "^3.7.0",
+    "gulp": "^3.8.11",
     "gulp-load-plugins": "~0.5.1",
-
-    "react-d3-components": "^0.3.6",
-    "gulp-maven-deploy": "~0.1.2"
-
+    "gulp-maven-deploy": "~0.1.2",
+    "react-d3-components": "^0.3.6"
   }
 }
-
-
