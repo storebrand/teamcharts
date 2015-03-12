@@ -8,7 +8,19 @@ var gulp = require('gulp'),
  * Deployment
  * Options: https://github.com/finn-no/maven-deploy
  */
-gulp.task('mvn-install', function(){
+ var filesToMove = [
+         './*',
+         '.*'
+     ];
+
+ gulp.task('move', function(){
+   // the base option sets the relative root for the set of files,
+   // preserving the folder structure
+   gulp.src(filesToMove, { base: './' })
+   .pipe(gulp.dest('dist'));
+ });
+
+gulp.task('mvn-install', ['move'], function(){
   return gulp.src('.')
     .pipe(maven.install({
         'config': {
@@ -18,7 +30,7 @@ gulp.task('mvn-install', function(){
     }));
 });
 
-gulp.task('mvn-deploy',  function(){
+gulp.task('mvn-deploy',['move'], function(){
     return gulp.src('.')
     .pipe(maven.deploy({
         'config': {
@@ -35,7 +47,7 @@ gulp.task('mvn-deploy',  function(){
     }));
 });
 
-gulp.task('mvn-deploy-release',  function(){
+gulp.task('mvn-deploy-release', ['move'], function(){
   return gulp.src('.')
     .pipe(maven.deploy({
         'config': {
